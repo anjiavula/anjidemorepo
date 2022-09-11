@@ -1,0 +1,142 @@
+{
+	"name": "ds_source",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "Ls_datalakestorage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Excel",
+		"typeProperties": {
+			"sheetName": "Sheet1",
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"fileName": "Sales Customer.xlsx",
+				"fileSystem": "inputcontainer"
+			},
+			"firstRowAsHeader": true
+		},
+		"schema": [
+			{
+				"name": "CustomerID",
+				"type": "String"
+			},
+			{
+				"name": "CustomerName",
+				"type": "String"
+			},
+			{
+				"name": "BillToCustomerID",
+				"type": "String"
+			},
+			{
+				"name": "CustomerCategoryID",
+				"type": "String"
+			},
+			{
+				"name": "PrimaryContactPersonID",
+				"type": "String"
+			},
+			{
+				"name": "AlternateContactPersonID",
+				"type": "String"
+			},
+			{
+				"name": "DeliveryMethodID",
+				"type": "String"
+			},
+			{
+				"name": "DeliveryCityID",
+				"type": "String"
+			},
+			{
+				"name": "PostalCityID",
+				"type": "String"
+			},
+			{
+				"name": "CreditLimit",
+				"type": "String"
+			},
+			{
+				"name": "AccountOpenedDate",
+				"type": "String"
+			},
+			{
+				"name": "StandardDiscountPercentage",
+				"type": "String"
+			},
+			{
+				"name": "IsStatementSent",
+				"type": "String"
+			},
+			{
+				"name": "IsOnCreditHold",
+				"type": "String"
+			},
+			{
+				"name": "PaymentDays",
+				"type": "String"
+			},
+			{
+				"name": "PhoneNumber",
+				"type": "String"
+			},
+			{
+				"name": "FaxNumber",
+				"type": "String"
+			},
+			{
+				"name": "WebsiteURL",
+				"type": "String"
+			},
+			{
+				"name": "DeliveryAddressLine1",
+				"type": "String"
+			},
+			{
+				"name": "DeliveryAddressLine2",
+				"type": "String"
+			},
+			{
+				"name": "DeliveryPostalCode",
+				"type": "String"
+			},
+			{
+				"name": "DeliveryLocation",
+				"type": "String"
+			},
+			{
+				"name": "PostalAddressLine1",
+				"type": "String"
+			},
+			{
+				"name": "PostalAddressLine2",
+				"type": "String"
+			},
+			{
+				"name": "PostalPostalCode",
+				"type": "String"
+			},
+			{
+				"name": "CityID",
+				"type": "String"
+			},
+			{
+				"name": "CityName",
+				"type": "String"
+			},
+			{
+				"name": "DeliveryCityID.LatestRecordedPopulation",
+				"type": "String"
+			},
+			{
+				"name": ".DeliveryMethodID",
+				"type": "String"
+			},
+			{
+				"name": ".DeliveryMethodName",
+				"type": "String"
+			}
+		]
+	}
+}
