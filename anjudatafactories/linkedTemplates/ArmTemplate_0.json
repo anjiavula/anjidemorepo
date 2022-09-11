@@ -1,0 +1,324 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "anjudatafactories"
+		},
+		"Ls_datalakestorage_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'Ls_datalakestorage'"
+		},
+		"Ls_sinkdatalakestorrage_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'Ls_sinkdatalakestorrage'"
+		},
+		"Ls_datalakestorage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://anjublobstorage.dfs.core.windows.net/"
+		},
+		"Ls_sinkdatalakestorrage_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://anjublobstorage.dfs.core.windows.net/"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Ls_datalakestorage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('Ls_datalakestorage_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('Ls_datalakestorage_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Ls_sinkdatalakestorrage')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('Ls_sinkdatalakestorrage_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('Ls_sinkdatalakestorrage_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Ls_sinkdatalakestorrage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"folderPath": "input folder",
+						"fileSystem": "inputcontainer"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Ls_sinkdatalakestorrage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/ds_source')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "Ls_datalakestorage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "Excel",
+				"typeProperties": {
+					"sheetName": "Sheet1",
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileName": "Sales Customer.xlsx",
+						"fileSystem": "inputcontainer"
+					},
+					"firstRowAsHeader": true
+				},
+				"schema": [
+					{
+						"name": "CustomerID",
+						"type": "String"
+					},
+					{
+						"name": "CustomerName",
+						"type": "String"
+					},
+					{
+						"name": "BillToCustomerID",
+						"type": "String"
+					},
+					{
+						"name": "CustomerCategoryID",
+						"type": "String"
+					},
+					{
+						"name": "PrimaryContactPersonID",
+						"type": "String"
+					},
+					{
+						"name": "AlternateContactPersonID",
+						"type": "String"
+					},
+					{
+						"name": "DeliveryMethodID",
+						"type": "String"
+					},
+					{
+						"name": "DeliveryCityID",
+						"type": "String"
+					},
+					{
+						"name": "PostalCityID",
+						"type": "String"
+					},
+					{
+						"name": "CreditLimit",
+						"type": "String"
+					},
+					{
+						"name": "AccountOpenedDate",
+						"type": "String"
+					},
+					{
+						"name": "StandardDiscountPercentage",
+						"type": "String"
+					},
+					{
+						"name": "IsStatementSent",
+						"type": "String"
+					},
+					{
+						"name": "IsOnCreditHold",
+						"type": "String"
+					},
+					{
+						"name": "PaymentDays",
+						"type": "String"
+					},
+					{
+						"name": "PhoneNumber",
+						"type": "String"
+					},
+					{
+						"name": "FaxNumber",
+						"type": "String"
+					},
+					{
+						"name": "WebsiteURL",
+						"type": "String"
+					},
+					{
+						"name": "DeliveryAddressLine1",
+						"type": "String"
+					},
+					{
+						"name": "DeliveryAddressLine2",
+						"type": "String"
+					},
+					{
+						"name": "DeliveryPostalCode",
+						"type": "String"
+					},
+					{
+						"name": "DeliveryLocation",
+						"type": "String"
+					},
+					{
+						"name": "PostalAddressLine1",
+						"type": "String"
+					},
+					{
+						"name": "PostalAddressLine2",
+						"type": "String"
+					},
+					{
+						"name": "PostalPostalCode",
+						"type": "String"
+					},
+					{
+						"name": "CityID",
+						"type": "String"
+					},
+					{
+						"name": "CityName",
+						"type": "String"
+					},
+					{
+						"name": "DeliveryCityID.LatestRecordedPopulation",
+						"type": "String"
+					},
+					{
+						"name": ".DeliveryMethodID",
+						"type": "String"
+					},
+					{
+						"name": ".DeliveryMethodName",
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/Ls_datalakestorage')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Copy data1",
+						"type": "Copy",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [
+							{
+								"name": "Source",
+								"value": "inputcontainer//Sales Customer.xlsx"
+							},
+							{
+								"name": "Destination",
+								"value": "inputcontainer/input folder/"
+							}
+						],
+						"typeProperties": {
+							"source": {
+								"type": "ExcelSource",
+								"storeSettings": {
+									"type": "AzureBlobFSReadSettings",
+									"recursive": true,
+									"enablePartitionDiscovery": false
+								}
+							},
+							"sink": {
+								"type": "DelimitedTextSink",
+								"storeSettings": {
+									"type": "AzureBlobFSWriteSettings"
+								},
+								"formatSettings": {
+									"type": "DelimitedTextWriteSettings",
+									"quoteAllText": true,
+									"fileExtension": ".txt"
+								}
+							},
+							"enableStaging": false,
+							"translator": {
+								"type": "TabularTranslator",
+								"typeConversion": true,
+								"typeConversionSettings": {
+									"allowDataTruncation": true,
+									"treatBooleanAsNumber": false
+								}
+							}
+						},
+						"inputs": [
+							{
+								"referenceName": "ds_source",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						],
+						"outputs": [
+							{
+								"referenceName": "DelimitedText1",
+								"type": "DatasetReference",
+								"parameters": {}
+							}
+						]
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/ds_source')]",
+				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]"
+			]
+		}
+	]
+}
