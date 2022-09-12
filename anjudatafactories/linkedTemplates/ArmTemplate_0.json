@@ -90,7 +90,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/ds_source')]",
+			"name": "[concat(parameters('factoryName'), '/ds_deleting')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -99,135 +99,64 @@
 					"type": "LinkedServiceReference"
 				},
 				"annotations": [],
-				"type": "Excel",
+				"type": "DelimitedText",
 				"typeProperties": {
-					"sheetName": "Sheet1",
 					"location": {
 						"type": "AzureBlobFSLocation",
-						"fileName": "Sales Customer.xlsx",
 						"fileSystem": "inputcontainer"
 					},
-					"firstRowAsHeader": true
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
 				},
 				"schema": [
 					{
-						"name": "CustomerID",
+						"name": "Order ID",
 						"type": "String"
 					},
 					{
-						"name": "CustomerName",
+						"name": "Order Date",
 						"type": "String"
 					},
 					{
-						"name": "BillToCustomerID",
+						"name": "Company Name",
 						"type": "String"
 					},
 					{
-						"name": "CustomerCategoryID",
+						"name": "Product ID",
 						"type": "String"
 					},
 					{
-						"name": "PrimaryContactPersonID",
+						"name": "Location",
 						"type": "String"
 					},
 					{
-						"name": "AlternateContactPersonID",
+						"name": "Dept",
 						"type": "String"
 					},
 					{
-						"name": "DeliveryMethodID",
+						"name": "Qty",
 						"type": "String"
 					},
 					{
-						"name": "DeliveryCityID",
+						"name": "Purchaser",
 						"type": "String"
 					},
 					{
-						"name": "PostalCityID",
+						"name": "Phone Number",
 						"type": "String"
 					},
 					{
-						"name": "CreditLimit",
+						"name": "Email",
 						"type": "String"
 					},
 					{
-						"name": "AccountOpenedDate",
+						"name": "Text Msg",
 						"type": "String"
 					},
 					{
-						"name": "StandardDiscountPercentage",
-						"type": "String"
-					},
-					{
-						"name": "IsStatementSent",
-						"type": "String"
-					},
-					{
-						"name": "IsOnCreditHold",
-						"type": "String"
-					},
-					{
-						"name": "PaymentDays",
-						"type": "String"
-					},
-					{
-						"name": "PhoneNumber",
-						"type": "String"
-					},
-					{
-						"name": "FaxNumber",
-						"type": "String"
-					},
-					{
-						"name": "WebsiteURL",
-						"type": "String"
-					},
-					{
-						"name": "DeliveryAddressLine1",
-						"type": "String"
-					},
-					{
-						"name": "DeliveryAddressLine2",
-						"type": "String"
-					},
-					{
-						"name": "DeliveryPostalCode",
-						"type": "String"
-					},
-					{
-						"name": "DeliveryLocation",
-						"type": "String"
-					},
-					{
-						"name": "PostalAddressLine1",
-						"type": "String"
-					},
-					{
-						"name": "PostalAddressLine2",
-						"type": "String"
-					},
-					{
-						"name": "PostalPostalCode",
-						"type": "String"
-					},
-					{
-						"name": "CityID",
-						"type": "String"
-					},
-					{
-						"name": "CityName",
-						"type": "String"
-					},
-					{
-						"name": "DeliveryCityID.LatestRecordedPopulation",
-						"type": "String"
-					},
-					{
-						"name": ".DeliveryMethodID",
-						"type": "String"
-					},
-					{
-						"name": ".DeliveryMethodName",
+						"name": "Time Zone",
 						"type": "String"
 					}
 				]
@@ -237,14 +166,14 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"name": "[concat(parameters('factoryName'), '/deleting date')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy data1",
-						"type": "Copy",
+						"name": "Get Metadata1",
+						"type": "GetMetadata",
 						"dependsOn": [],
 						"policy": {
 							"timeout": "0.12:00:00",
@@ -253,71 +182,143 @@
 							"secureOutput": false,
 							"secureInput": false
 						},
-						"userProperties": [
-							{
-								"name": "Source",
-								"value": "inputcontainer//Sales Customer.xlsx"
-							},
-							{
-								"name": "Destination",
-								"value": "inputcontainer/input folder/"
-							}
-						],
+						"userProperties": [],
 						"typeProperties": {
-							"source": {
-								"type": "ExcelSource",
-								"storeSettings": {
-									"type": "AzureBlobFSReadSettings",
-									"recursive": true,
-									"enablePartitionDiscovery": false
-								}
-							},
-							"sink": {
-								"type": "DelimitedTextSink",
-								"storeSettings": {
-									"type": "AzureBlobFSWriteSettings"
-								},
-								"formatSettings": {
-									"type": "DelimitedTextWriteSettings",
-									"quoteAllText": true,
-									"fileExtension": ".txt"
-								}
-							},
-							"enableStaging": false,
-							"translator": {
-								"type": "TabularTranslator",
-								"typeConversion": true,
-								"typeConversionSettings": {
-									"allowDataTruncation": true,
-									"treatBooleanAsNumber": false
-								}
-							}
-						},
-						"inputs": [
-							{
-								"referenceName": "ds_source",
+							"dataset": {
+								"referenceName": "ds_deleting",
 								"type": "DatasetReference",
 								"parameters": {}
+							},
+							"fieldList": [
+								"childItems"
+							],
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					},
+					{
+						"name": "ForEach1",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Get Metadata1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
 							}
 						],
-						"outputs": [
-							{
-								"referenceName": "DelimitedText1",
-								"type": "DatasetReference",
-								"parameters": {}
-							}
-						]
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get Metadata1').output.childItems",
+								"type": "Expression"
+							},
+							"isSequential": true,
+							"activities": [
+								{
+									"name": "Get Metadata2",
+									"type": "GetMetadata",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "ds_deleting",
+											"type": "DatasetReference",
+											"parameters": {}
+										},
+										"fieldList": [
+											"childItems",
+											"lastModified"
+										],
+										"storeSettings": {
+											"type": "AzureBlobFSReadSettings",
+											"recursive": true,
+											"modifiedDatetimeStart": "2022-09-12T00:00:00.437Z",
+											"modifiedDatetimeEnd": {
+												"value": "@addDays(utcNow(),-1)",
+												"type": "Expression"
+											},
+											"enablePartitionDiscovery": false
+										},
+										"formatSettings": {
+											"type": "DelimitedTextReadSettings"
+										}
+									}
+								},
+								{
+									"name": "Delete1",
+									"type": "Delete",
+									"dependsOn": [
+										{
+											"activity": "Get Metadata2",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "ds_deleting",
+											"type": "DatasetReference",
+											"parameters": {}
+										},
+										"logStorageSettings": {
+											"linkedServiceName": {
+												"referenceName": "Ls_datalakestorage",
+												"type": "LinkedServiceReference"
+											}
+										},
+										"enableLogging": true,
+										"storeSettings": {
+											"type": "AzureBlobFSReadSettings",
+											"recursive": true,
+											"wildcardFileName": {
+												"value": "@{activity('Get Metadata2').output.childItems}",
+												"type": "Expression"
+											},
+											"enablePartitionDiscovery": false
+										}
+									}
+								}
+							]
+						}
 					}
 				],
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"parameters": {
+					"filename": {
+						"type": "string"
+					}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/ds_source')]",
-				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]"
+				"[concat(variables('factoryId'), '/datasets/ds_deleting')]",
+				"[concat(variables('factoryId'), '/linkedServices/Ls_datalakestorage')]"
 			]
 		}
 	]
