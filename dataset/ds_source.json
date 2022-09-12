@@ -8,10 +8,8 @@
 		"annotations": [],
 		"type": "Excel",
 		"typeProperties": {
-			"sheetName": "Sheet1",
 			"location": {
 				"type": "AzureBlobFSLocation",
-				"fileName": "Sales Customer.xlsx",
 				"fileSystem": "inputcontainer"
 			},
 			"firstRowAsHeader": true
